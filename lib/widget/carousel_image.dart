@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clone_netflix/model/model_movie.dart';
+import 'package:clone_netflix/screen/detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class CarouselImage extends StatefulWidget {
@@ -56,6 +57,7 @@ class _CarouselImageState extends State<CarouselImage> {
               },
             ),
           ),
+          //포스터 하단 텍스트
           Container(
             padding : EdgeInsets.fromLTRB(0, 10, 0, 3),
             child : Column(
@@ -65,10 +67,13 @@ class _CarouselImageState extends State<CarouselImage> {
               ],
             ),
           ),
+
+          //중단 메뉴
           Container(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                //내가찜한컨텐츠
                 Container(
                   child : Column(
                     children: <Widget>[
@@ -76,12 +81,17 @@ class _CarouselImageState extends State<CarouselImage> {
                       ? IconButton(icon : Icon(Icons.check), onPressed: (){
                         setState(() {
                           likes![_currentPage] = false;
+                          movies![_currentPage].reference.update(
+                            {"like" : false}
+                          );
                         });
-
                       })
                       : IconButton(icon : Icon(Icons.add), onPressed: (){
                         setState(() {
                           likes![_currentPage] = true;
+                          movies![_currentPage].reference.update(
+                              {"like" : true}
+                          );
                         });
                       }),
                       Text(
@@ -91,6 +101,7 @@ class _CarouselImageState extends State<CarouselImage> {
                     ],
                   )
                 ),
+                //재생
                 Container(
                   padding : EdgeInsets.only(right : 10),
                   child : TextButton(
@@ -105,12 +116,20 @@ class _CarouselImageState extends State<CarouselImage> {
                     style : TextButton.styleFrom(backgroundColor: Colors.white),
                   )
                 ),
+                //정보
                 Container(padding : EdgeInsets.only(right: 10),
                   child: Column(
                     children : [
                       IconButton(
                         icon:Icon(Icons.info),
-                        onPressed: (){},
+                        onPressed: (){
+                          Navigator.of(context).push(
+                              MaterialPageRoute(fullscreenDialog : true, builder : (BuildContext context){
+                                return DetailScreen(movie: movies![_currentPage]);
+                              }
+                          )
+                          );
+                        },
                       ),
                       Text(
                         '정보',
@@ -124,6 +143,7 @@ class _CarouselImageState extends State<CarouselImage> {
               ],
             ),
           ),
+          //indicator
           Container(
               child : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
